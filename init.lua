@@ -130,11 +130,10 @@ require('lazy').setup({
   },
 
   {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
+    'fcpg/vim-fahrenheit',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'onedark'
+      vim.cmd.colorscheme 'fahrenheit'
     end,
   },
 
@@ -206,7 +205,7 @@ require('lazy').setup({
   },
 
   {
-    'evanleck/vim-svelte'
+    'leafOfTree/vim-svelte-plugin'
   },
 
   --       These are some example plugins that I've included in the kickstart repository.
