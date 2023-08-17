@@ -17,9 +17,7 @@ Kickstart.nvim is a template for your own configuration.
   a guide. One possible example:
   - https://learnxinyminutes.com/docs/lua/
 
-
   And then you can explore or search through `:help lua-guide`
-  - https://neovim.io/doc/user/lua-guide.html
 
 
 Kickstart Guide:
@@ -198,7 +196,19 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
-  -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
+  -- Mine
+  {
+    'github/copilot.vim'
+  },
+
+  {
+    'ThePrimeagen/vim-be-good'
+  },
+
+  {
+    'evanleck/vim-svelte'
+  },
+
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
   -- require 'kickstart.plugins.autoformat',
@@ -213,12 +223,19 @@ require('lazy').setup({
   -- { import = 'custom.plugins' },
 }, {})
 
+-- Mine
+vim.o.wrap = false;
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
 
 -- Set highlight on search
 vim.o.hlsearch = false
+
+-- Set relative number
+vim.o.relativenumber = true
+vim.o.report = 16
 
 -- Make line numbers default
 vim.wo.number = true
@@ -261,8 +278,8 @@ vim.o.termguicolors = true
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+-- vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+-- vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -279,12 +296,19 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
   defaults = {
+    winblend = 0,
     mappings = {
       i = {
         ['<C-u>'] = false,
         ['<C-d>'] = false,
       },
     },
+    file_ignore_patterns = {
+      "node_modules",
+      "@sveltekit/kit",
+      ".svelte%-kit",
+      ".git"
+    }
   },
 }
 
@@ -293,11 +317,10 @@ pcall(require('telescope').load_extension, 'fzf')
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
-vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
-vim.keymap.set('n', '<leader>/', function()
+vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' }) vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    winblend = 10,
+    winblend = 0,
     previewer = false,
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
@@ -313,7 +336,7 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
+  ensure_installed = { 'c', 'cpp', 'css', 'go', 'html', 'javascript', 'lua', 'python', 'rust', 'scss', 'svelte', 'tsx', 'vimdoc', 'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -496,7 +519,7 @@ cmp.setup {
     ['<C-Space>'] = cmp.mapping.complete {},
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
+      select = false,
     },
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
