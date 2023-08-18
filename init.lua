@@ -91,22 +91,6 @@ require('lazy').setup({
     },
   },
 
-  {
-    -- Autocompletion
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      -- Snippet Engine & its associated nvim-cmp source
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip',
-
-      -- Adds LSP completion capabilities
-      'hrsh7th/cmp-nvim-lsp',
-
-      -- Adds a number of user-friendly snippets
-      'rafamadriz/friendly-snippets',
-    },
-  },
-
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim', opts = {} },
   {
@@ -144,7 +128,6 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
         component_separators = '|',
         section_separators = '',
       },
@@ -159,6 +142,7 @@ require('lazy').setup({
     opts = {
       char = '┊',
       show_trailing_blankline_indent = false,
+      use_treesitter = true,
     },
   },
 
@@ -205,7 +189,19 @@ require('lazy').setup({
   },
 
   {
-    'leafOfTree/vim-svelte-plugin'
+    'ThePrimeagen/harpoon'
+  },
+
+  {
+    'leafOfTree/vim-svelte-plugin',
+  },
+
+  {
+    'mbbill/undotree'
+  },
+
+  {
+    'BurntSushi/ripgrep'
   },
 
   --       These are some example plugins that I've included in the kickstart repository.
@@ -222,8 +218,72 @@ require('lazy').setup({
   -- { import = 'custom.plugins' },
 }, {})
 
+
+
+
 -- Mine
+
+
+require('harpoon').setup()
+local mark = require('harpoon.mark')
+local ui = require('harpoon.ui')
+
 vim.o.wrap = false;
+
+-- Harpoon keymaps
+vim.keymap.set('n', '<leader>a', mark.add_file, { desc = '[A]dd to Harpoon' })
+vim.keymap.set('n', '<C-e>', ui.toggle_quick_menu)
+
+vim.keymap.set('n', '<F1>', function() ui.nav_file(1) end)
+vim.keymap.set('n', '<F2>', function() ui.nav_file(2) end)
+vim.keymap.set('n', '<F3>', function() ui.nav_file(3) end)
+vim.keymap.set('n', '<F4>', function() ui.nav_file(4) end)
+
+-- Undotree keymap
+vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = '[U]ndo Tree' })
+
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = vim.fn.stdpath('config') .. '/undodir'
+vim.opt.undofile = true
+
+-- Set numbers on the left side
+vim.opt.nu = true
+
+-- Set relative number
+vim.o.relativenumber = true
+
+vim.opt.updatetime = 50
+
+-- Copied from ThePrimeagen
+-- Move content of line up and down
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
+-- Keep cursor centered
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
+
+-- Paste without copying to clipboard
+vim.keymap.set('x', '<leader>p', '"_dP', { desc = 'Paste without copying to clipboard' })
+
+-- Replace current word
+vim.keymap.set('n', '<leader>s', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>', { desc = 'Replace current word' })
+
+
+-- Undotree options
+vim.g.undotree_WindowLayout = 4
+vim.g.undotree_SetFocusWhenToggle = 1
+
+-- Change blankline color
+vim.cmd('hi IndentBlankLineChar guifg=#442211 gui=nocombine')
+
+-- End Mine
+
+
+
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -231,10 +291,6 @@ vim.o.wrap = false;
 
 -- Set highlight on search
 vim.o.hlsearch = false
-
--- Set relative number
-vim.o.relativenumber = true
-vim.o.report = 16
 
 -- Make line numbers default
 vim.wo.number = true
@@ -335,12 +391,15 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'css', 'go', 'html', 'javascript', 'lua', 'python', 'rust', 'scss', 'svelte', 'tsx', 'vimdoc', 'vim' },
+  ensure_installed = { 'c', 'cpp', 'go', 'html', 'javascript', 'lua', 'python', 'rust', 'scss', 'tsx', 'vimdoc', 'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
 
-  highlight = { enable = true },
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting=false,
+  },
   indent = { enable = true },
   incremental_selection = {
     enable = true,
@@ -383,15 +442,6 @@ require('nvim-treesitter.configs').setup {
       goto_previous_end = {
         ['[M'] = '@function.outer',
         ['[]'] = '@class.outer',
-      },
-    },
-    swap = {
-      enable = true,
-      swap_next = {
-        ['<leader>a'] = '@parameter.inner',
-      },
-      swap_previous = {
-        ['<leader>A'] = '@parameter.inner',
       },
     },
   },
@@ -475,10 +525,6 @@ local servers = {
 -- Setup neovim lua configuration
 require('neodev').setup()
 
--- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
 
@@ -495,54 +541,6 @@ mason_lspconfig.setup_handlers {
       filetypes = (servers[server_name] or {}).filetypes,
     }
   end
-}
-
--- [[ Configure nvim-cmp ]]
--- See `:help cmp`
-local cmp = require 'cmp'
-local luasnip = require 'luasnip'
-require('luasnip.loaders.from_vscode').lazy_load()
-luasnip.config.setup {}
-
-cmp.setup {
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
-  mapping = cmp.mapping.preset.insert {
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete {},
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = false,
-    },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.locally_jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  },
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-  },
 }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
