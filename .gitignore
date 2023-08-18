@@ -3,4 +3,5 @@ test.sh
 .luarc.json
 nvim
 lazy-lock.json
+node_modules/*
 undodir/*
