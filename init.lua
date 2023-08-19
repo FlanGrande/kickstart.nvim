@@ -86,6 +86,7 @@ require('lazy').setup({
       {'hrsh7th/cmp-buffer'},     -- Required
       {'hrsh7th/cmp-path'},     -- Required
       {'hrsh7th/cmp-nvim-lsp'}, -- Required
+      {'L3MON4D3/LuaSnip'},     -- Required
       { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
@@ -229,75 +230,6 @@ require('lazy').setup({
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
   -- { import = 'custom.plugins' },
 }, {})
-
-
-
-
--- Mine
-
-
-require('harpoon').setup()
-local mark = require('harpoon.mark')
-local ui = require('harpoon.ui')
-
-vim.o.wrap = false;
-
--- Harpoon keymaps
-vim.keymap.set('n', '<leader>a', mark.add_file, { desc = '[A]dd to Harpoon' })
-vim.keymap.set('n', '<C-e>', ui.toggle_quick_menu)
-
-vim.keymap.set('n', '<F1>', function() ui.nav_file(1) end)
-vim.keymap.set('n', '<F2>', function() ui.nav_file(2) end)
-vim.keymap.set('n', '<F3>', function() ui.nav_file(3) end)
-vim.keymap.set('n', '<F4>', function() ui.nav_file(4) end)
-
--- Undotree keymap
-vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = '[U]ndo Tree' })
-
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = vim.fn.stdpath('config') .. '/undodir'
-vim.opt.undofile = true
-
--- Set numbers on the left side
-vim.opt.nu = true
-
--- Set relative number
-vim.o.relativenumber = true
-
-vim.opt.updatetime = 50
-vim.opt.timeoutlen = 300
-
--- Copied from ThePrimeagen
--- Move content of line up and down
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
-vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
-
--- Keep cursor centered
-vim.keymap.set('n', '<C-d>', '<C-d>zz')
-vim.keymap.set('n', '<C-u>', '<C-u>zz')
-vim.keymap.set('n', 'n', 'nzzzv')
-vim.keymap.set('n', 'N', 'Nzzzv')
-
--- Paste without copying to clipboard
-vim.keymap.set('x', '<leader>p', '"_dP', { desc = 'Paste without copying to clipboard' })
-
--- Replace current word
-vim.keymap.set('n', '<leader>s', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>', { desc = 'Replace current word' })
-
-
--- Undotree options
-vim.g.undotree_WindowLayout = 4
-vim.g.undotree_SetFocusWhenToggle = 1
-
--- Change blankline color
-vim.cmd('hi IndentBlankLineChar guifg=#442211 gui=nocombine')
-
-
--- End Mine
-
-
-
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -453,13 +385,17 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = false,
+})
 
-lsp.on_attach(function(client, bufnr)
-  -- see :help lsp-zero-keybindings
-  -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
-end)
+
+-- lsp.on_attach(function(client, bufnr)
+--   -- see :help lsp-zero-keybindings
+--   -- to learn the available actions
+--   -- lsp.default_keymaps({buffer = bufnr})
+-- end)
 
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
@@ -467,6 +403,100 @@ lsp.setup()
 
 -- Setup neovim lua configuration
 require('neodev').setup()
+
+
+
+
+-- Mine
+
+
+require('harpoon').setup()
+local mark = require('harpoon.mark')
+local ui = require('harpoon.ui')
+
+vim.o.wrap = false;
+
+-- Harpoon keymaps
+vim.keymap.set('n', '<leader>a', mark.add_file, { desc = '[A]dd to Harpoon' })
+vim.keymap.set('n', '<C-e>', ui.toggle_quick_menu)
+
+vim.keymap.set('n', '<F1>', function() ui.nav_file(1) end)
+vim.keymap.set('n', '<F2>', function() ui.nav_file(2) end)
+vim.keymap.set('n', '<F3>', function() ui.nav_file(3) end)
+vim.keymap.set('n', '<F4>', function() ui.nav_file(4) end)
+
+-- Undotree keymap
+vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = '[U]ndo Tree' })
+
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = vim.fn.stdpath('config') .. '/undodir'
+vim.opt.undofile = true
+
+-- Set numbers on the left side
+vim.opt.nu = true
+
+-- Set relative number
+vim.o.relativenumber = true
+
+vim.opt.updatetime = 50
+vim.opt.timeoutlen = 300
+
+-- Copied from ThePrimeagen
+-- Move content of line up and down
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
+-- Keep cursor centered
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', 'n', 'nzzzv')
+vim.keymap.set('n', 'N', 'Nzzzv')
+
+-- Paste without copying to clipboard
+vim.keymap.set('x', '<leader>p', '"_dP', { desc = 'Paste without copying to clipboard' })
+
+-- Replace current word
+vim.keymap.set('n', '<leader>s', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>', { desc = 'Replace current word' })
+
+
+-- Undotree options
+vim.g.undotree_WindowLayout = 4
+vim.g.undotree_SetFocusWhenToggle = 1
+
+-- Change blankline color
+vim.cmd('hi IndentBlankLineChar guifg=#442211 gui=nocombine')
+
+-- vim.keymap.del('i', '<Up>')
+-- vim.keymap.del('i', '<Down>')
+-- vim.keymap.del('i', '<Tab>')
+-- vim.keymap.del('i', '<S-Tab>')
+
+-- vim.keymap.set('i', '<Up>', '<Up>', { noremap = true, silent = true })
+-- vim.keymap.set('i', '<Down>', '<Down>', { noremap = true, silent = true })
+-- vim.keymap.set('i', '<Tab>', '<Tab>', { noremap = true, silent = true })
+-- vim.keymap.set('i', '<S-Tab>', '<S-Tab>', { noremap = true, silent = true })
+
+-- Help on hovered word
+vim.keymap.set('n', 'K', ':help <C-r><C-w><CR>', { noremap = true, silent = true })
+
+local cmp = require('cmp')
+
+cmp.setup({
+  mapping = {
+    ['<Up>'] = cmp.mapping.abort(),
+    ['<Down>'] = cmp.mapping.abort(),
+  },
+})
+
+-- reset Tab and S-Tab behaviour
+vim.keymap.set('i', '<Tab>', '<Tab>', { noremap = true, silent = true })
+vim.keymap.set('i', '<S-Tab>', '<C-d>', { noremap = true, silent = true })
+
+-- End Mine
+
+
+
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
