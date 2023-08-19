@@ -326,22 +326,22 @@ require('nvim-treesitter.configs').setup {
   ensure_installed = { 'c', 'cpp', 'go', 'html', 'javascript', 'lua', 'python', 'rust', 'scss', 'tsx', 'vimdoc', 'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-  auto_install = false,
+  auto_install = true,
 
   highlight = {
     enable = true,
     additional_vim_regex_highlighting=false,
   },
   indent = { enable = true },
-  incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = '<c-space>',
-      node_incremental = '<c-space>',
-      scope_incremental = '<c-s>',
-      node_decremental = '<M-space>',
-    },
-  },
+  -- incremental_selection = {
+  --   enable = true,
+  --   keymaps = {
+  --     init_selection = '<C-Space>',
+  --     node_incremental = '<C-Space>',
+  --     scope_incremental = '<C-S>',
+  --     node_decremental = '<M-Space>',
+  --   },
+  -- },
   textobjects = {
     select = {
       enable = true,
@@ -467,16 +467,6 @@ vim.g.undotree_SetFocusWhenToggle = 1
 -- Change blankline color
 vim.cmd('hi IndentBlankLineChar guifg=#442211 gui=nocombine')
 
--- vim.keymap.del('i', '<Up>')
--- vim.keymap.del('i', '<Down>')
--- vim.keymap.del('i', '<Tab>')
--- vim.keymap.del('i', '<S-Tab>')
-
--- vim.keymap.set('i', '<Up>', '<Up>', { noremap = true, silent = true })
--- vim.keymap.set('i', '<Down>', '<Down>', { noremap = true, silent = true })
--- vim.keymap.set('i', '<Tab>', '<Tab>', { noremap = true, silent = true })
--- vim.keymap.set('i', '<S-Tab>', '<S-Tab>', { noremap = true, silent = true })
-
 -- Help on hovered word
 vim.keymap.set('n', 'K', ':help <C-r><C-w><CR>', { noremap = true, silent = true })
 
@@ -487,11 +477,21 @@ cmp.setup({
     ['<Up>'] = cmp.mapping.abort(),
     ['<Down>'] = cmp.mapping.abort(),
   },
+  completion = {
+    autocomplete = false,
+  },
 })
+
+-- Start autocompletion
+vim.keymap.set('i', '<C-s>', cmp.mapping.complete())
+
+-- This would be nice but I think tabby is overriding it
+-- vim.keymap.set('i', '<C-Space>', ':lua require(\'cmp\').complete()<CR>')
 
 -- reset Tab and S-Tab behaviour
 vim.keymap.set('i', '<Tab>', '<Tab>', { noremap = true, silent = true })
 vim.keymap.set('i', '<S-Tab>', '<C-d>', { noremap = true, silent = true })
+
 
 -- End Mine
 
