@@ -41,6 +41,37 @@ P.S. You can delete this when you're done too. It's your config now :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- Set to true if you have a Nerd Font installed and selected in the terminal
+vim.g.have_nerd_font = true
+
+-- Enable mouse mode, can be useful for resizing splits for example!
+vim.opt.mouse = 'a'
+
+-- Don't show the mode, since it's already in the status line
+vim.opt.showmode = false
+
+-- Configure how new splits should be opened
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+
+vim.opt.cursorline = true
+
+-- TIP: Disable arrow keys in normal mode
+vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
+vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
+vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
+vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+
+-- Keybinds to make split navigation easier.
+--  Use CTRL+<hjkl> to switch between windows
+--
+--  See `:help wincmd` for a list of all window commands
+vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
@@ -56,7 +87,6 @@ if not vim.loop.fs_stat(lazypath) then
   }
 end
 vim.opt.rtp:prepend(lazypath)
-
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
 --
@@ -142,10 +172,11 @@ require('lazy').setup({
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
+    main = "ibl",
     opts = {
-      char = '┊',
-      show_trailing_blankline_indent = false,
-      use_treesitter = true,
+      indent = {
+        char = '┊',
+      },
     },
   },
 
@@ -188,19 +219,11 @@ require('lazy').setup({
   -- Mine
 
   {
-    'github/copilot.vim'
-  },
-
-  {
     'ThePrimeagen/vim-be-good'
   },
 
   {
     'ThePrimeagen/harpoon'
-  },
-
-  {
-    'leafOfTree/vim-svelte-plugin',
   },
 
   {
@@ -323,7 +346,7 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'html', 'javascript', 'lua', 'python', 'rust', 'scss', 'tsx', 'vimdoc', 'vim' },
+  ensure_installed = { 'c', 'cpp', 'html', 'javascript', 'lua', 'python', 'scss', 'vimdoc', 'vim' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = true,
@@ -424,6 +447,10 @@ vim.keymap.set('n', '<F1>', function() ui.nav_file(1) end)
 vim.keymap.set('n', '<F2>', function() ui.nav_file(2) end)
 vim.keymap.set('n', '<F3>', function() ui.nav_file(3) end)
 vim.keymap.set('n', '<F4>', function() ui.nav_file(4) end)
+vim.keymap.set('n', '<F5>', function() ui.nav_file(5) end)
+vim.keymap.set('n', '<F6>', function() ui.nav_file(6) end)
+vim.keymap.set('n', '<F7>', function() ui.nav_file(7) end)
+vim.keymap.set('n', '<F8>', function() ui.nav_file(8) end)
 
 -- Undotree keymap
 vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = '[U]ndo Tree' })
@@ -454,7 +481,7 @@ vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
 -- Paste without copying to clipboard
-vim.keymap.set('x', '<leader>p', '"_dP', { desc = 'Paste without copying to clipboard' })
+-- vim.keymap.set('x', '<leader>p', '"_dP', { desc = 'Paste without copying to clipboard' })
 
 -- Replace current word
 vim.keymap.set('n', '<leader>s', ':%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>', { desc = 'Replace current word' })
@@ -474,8 +501,8 @@ local cmp = require('cmp')
 
 cmp.setup({
   mapping = {
-    ['<Up>'] = cmp.mapping.abort(),
-    ['<Down>'] = cmp.mapping.abort(),
+    ['<C-p>'] = cmp.mapping.abort(),
+    ['<C-n>'] = cmp.mapping.abort(),
   },
   completion = {
     autocomplete = false,
