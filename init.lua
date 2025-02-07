@@ -1,66 +1,69 @@
 --[[
 
 =====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
+==================== read this before continuing ====================
 =====================================================================
 
-Kickstart.nvim is *not* a distribution.
+kickstart.nvim is *not* a distribution.
 
-Kickstart.nvim is a template for your own configuration.
-  The goal is that you can read every line of code, top-to-bottom, understand
+kickstart.nvim is a template for your own configuration.
+  the goal is that you can read every line of code, top-to-bottom, understand
   what your configuration is doing, and modify it to suit your needs.
 
-  Once you've done that, you should start exploring, configuring and tinkering to
-  explore Neovim!
+  once you've done that, you should start exploring, configuring and tinkering to
+  explore neovim!
 
-  If you don't know anything about Lua, I recommend taking some time to read through
-  a guide. One possible example:
+  if you don't know anything about lua, i recommend taking some time to read through
+  a guide. one possible example:
   - https://learnxinyminutes.com/docs/lua/
 
-  And then you can explore or search through `:help lua-guide`
+  and then you can explore or search through `:help lua-guide`
 
 
-Kickstart Guide:
+kickstart guide:
 
-I have left several `:help X` comments throughout the init.lua
-You should run that command and read that help section for more information.
+i have left several `:help x` comments throughout the init.lua
+you should run that command and read that help section for more information.
 
-In addition, I have some `NOTE:` items throughout the file.
-These are for you, the reader to help understand what is happening. Feel free to delete
+in addition, i have some `note:` items throughout the file.
+these are for you, the reader to help understand what is happening. feel free to delete
 them once you know what you're doing, but they should serve as a guide for when you
 are first encountering a few different constructs in your nvim config.
 
-I hope you enjoy your Neovim journey,
-- TJ
+i hope you enjoy your neovim journey,
+- tj
 
-P.S. You can delete this when you're done too. It's your config now :)
+p.s. you can delete this when you're done too. it's your config now :)
 --]]
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
+-- set <space> as the leader key
+-- see `:help mapleader`
+--  note: must happen before plugins are required (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- Set to true if you have a Nerd Font installed and selected in the terminal
+-- set to true if you have a nerd font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
--- Enable mouse mode, can be useful for resizing splits for example!
+-- enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
 
--- Don't show the mode, since it's already in the status line
+-- don't show the mode, since it's already in the status line
 vim.opt.showmode = false
 
--- Configure how new splits should be opened
+-- configure how new splits should be opened
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
+-- highlights line where cursor is
 vim.opt.cursorline = true
+-- vim.api.nvim_set_hl(0, "CustomCursorLine", { bg = "#ff0000", bold = false, ctermbg = 88, link = "CursorLine" })
+-- vim.opt.winhighlight = "CursorLine:Visual"
 
 -- TIP: Disable arrow keys in normal mode
-vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
-vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
-vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
-vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!!"<CR>')
+vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!!"<CR>')
+vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!!"<CR>')
+vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -125,7 +128,21 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  {
+    'folke/which-key.nvim', opts = {
+      -- delay between pressing a key and opening which-key (milliseconds)
+      -- this setting is independent of vim.opt.timeoutlen
+      delay = 0,
+      icons = {
+        -- set icon mappings to true if you have a Nerd Font
+        mappings = vim.g.have_nerd_font,
+        -- If you are using a Nerd Font: set icons.keys to an empty table which will use the
+        -- default which-key.nvim defined Nerd Font icons, otherwise define a string table
+        keys = {}
+      },
+    },
+  },
+
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -201,6 +218,10 @@ require('lazy').setup({
           return vim.fn.executable 'make' == 1
         end,
       },
+      { 'nvim-telescope/telescope-ui-select.nvim' },
+
+      -- Useful for getting pretty icons, but requires a Nerd Font.
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
   },
 
@@ -324,6 +345,7 @@ require('telescope').setup {
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
+pcall(require('telescope').load_extension, 'ui-select')
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
@@ -341,6 +363,10 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('n', '<leader>sk', require('telescope.builtin').keymaps, { desc = '[S]earch [K]eymaps' })
+vim.keymap.set('n', '<leader>ss', require('telescope.builtin').builtin, { desc = '[S]earch [S]elect Telescope' })
+vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [Resume]' })
+vim.keymap.set('n', '<leader>s.', require('telescope.builtin').oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -501,19 +527,18 @@ local cmp = require('cmp')
 
 cmp.setup({
   mapping = {
-    ['<C-p>'] = cmp.mapping.abort(),
-    ['<C-n>'] = cmp.mapping.abort(),
-  },
-  completion = {
-    autocomplete = false,
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-y>'] = cmp.mapping.confirm {select = true},
+    ['<C-Space>'] = cmp.mapping.complete {},
+    ['<Up>'] = cmp.mapping.abort(),
+    ['<Down>'] = cmp.mapping.abort(),
+    ['<Tab>'] = cmp.mapping.abort(),
+    ['<S-Tab>'] = cmp.mapping.abort(),
   },
 })
-
--- Start autocompletion
-vim.keymap.set('i', '<C-s>', cmp.mapping.complete())
-
--- This would be nice but I think tabby is overriding it
--- vim.keymap.set('i', '<C-Space>', ':lua require(\'cmp\').complete()<CR>')
 
 -- reset Tab and S-Tab behaviour
 vim.keymap.set('i', '<Tab>', '<Tab>', { noremap = true, silent = true })
