@@ -131,6 +131,45 @@ require('lazy').setup({
     }
   },
 
+  {
+    'neovim/nvim-lspconfig',
+    dependencies = { 'saghen/blink.cmp' },
+
+    -- example using `opts` for defining servers
+    opts = {
+      servers = {
+        lua_ls = {}
+      }
+    },
+    config = function(_, opts)
+      local lspconfig = require('lspconfig')
+      for server, config in pairs(opts.servers) do
+        config.capabilities = require('blink.cmp').get_lsp_capabilities(config.capabilities)
+        lspconfig[server].setup(config)
+      end
+    end
+  },
+
+  {
+    'saghen/blink.cmp',
+    -- optional: provides snippets for the snippet source
+    dependencies = 'rafamadriz/friendly-snippets',
+
+    -- use a release tag to download pre-built binaries
+    version = '*',
+
+    opts = {
+      keymap = { preset = 'default' },
+
+      appearance = {
+        use_nvim_cmp_as_default = true,
+        nerd_font_variant = 'mono'
+      },
+
+      signature = { enabled = true }
+    },
+  },
+
   -- Useful plugin to show you pending keybinds.
   {
     'folke/which-key.nvim', opts = {
