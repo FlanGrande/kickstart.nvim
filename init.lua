@@ -861,24 +861,6 @@ vim.cmd('hi IndentBlankLineChar guifg=#442211 gui=nocombine')
 -- Help on hovered word
 vim.keymap.set('n', 'K', ':help <C-r><C-w><CR>', { noremap = true, silent = true })
 
--- local cmp = require('cmp')
---
--- cmp.setup({
---   mapping = {
---     ['<C-k>'] = cmp.mapping.select_prev_item(),
---     ['<C-j>'] = cmp.mapping.select_next_item(),
---     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
---     ['<C-f>'] = cmp.mapping.scroll_docs(4),
---     ['<C-y>'] = cmp.mapping.confirm {select = true},
---     ['<C-Space>'] = cmp.mapping.complete {},
---     ['<Up>'] = cmp.mapping.abort(),
---     ['<Down>'] = cmp.mapping.abort(),
---     ['<Tab>'] = cmp.mapping.abort(),
---     ['<S-Tab>'] = cmp.mapping.abort(),
---     ['<C-p>'] = cmp.mapping.abort(),
---     ['<C-n>'] = cmp.mapping.abort(),
---   },
--- })
 
 local cmp = require('cmp')
 
