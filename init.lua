@@ -649,6 +649,7 @@ vim.o.termguicolors = true
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+vim.keymap.set('n', '<C-q>', '', { noremap = true, silent = true })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -663,6 +664,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
+local actions = require('telescope.actions')
 require('telescope').setup {
   defaults = {
     winblend = 0,
@@ -670,6 +672,9 @@ require('telescope').setup {
       i = {
         ['<C-u>'] = false,
         ['<C-d>'] = false,
+      },
+      n = {
+        ['<C-q>'] = actions.smart_add_to_qflist,
       },
     },
     file_ignore_patterns = {
@@ -705,6 +710,7 @@ vim.keymap.set('n', '<leader>sk', require('telescope.builtin').keymaps, { desc =
 vim.keymap.set('n', '<leader>ss', require('telescope.builtin').builtin, { desc = '[S]earch [S]elect Telescope' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [Resume]' })
 vim.keymap.set('n', '<leader>s.', require('telescope.builtin').oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+vim.keymap.set('n', '<leader>sq', require('telescope.builtin').quickfix, { desc = '[S]earch [Q]uickfix List' })
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -936,27 +942,28 @@ cmp.setup.cmdline(':', {
 -- reset Tab and S-Tab behaviour
 vim.keymap.set('i', '<Tab>', '<Tab>', { noremap = true, silent = true })
 vim.keymap.set('i', '<S-Tab>', '<C-d>', { noremap = true, silent = true })
-vim.keymap.set('i', '<C-j>', '', { noremap = true, silent = true})
-vim.keymap.set('i', '<C-k>', '', { noremap = true, silent = true})
-vim.keymap.set('i', '<C-l>', '', { noremap = true, silent = true})
-vim.keymap.set('i', '<C-p>', '', { noremap = true, silent = true})
-vim.keymap.set('i', '<C-n>', '', { noremap = true, silent = true})
+vim.keymap.set('i', '<C-j>', '', { noremap = true, silent = true })
+vim.keymap.set('i', '<C-k>', '', { noremap = true, silent = true })
+vim.keymap.set('i', '<C-l>', '', { noremap = true, silent = true })
+vim.keymap.set('i', '<C-p>', '', { noremap = true, silent = true })
+vim.keymap.set('i', '<C-n>', '', { noremap = true, silent = true })
 
 
-vim.keymap.set('c', '<C-j>', '', { noremap = true, silent = true})
-vim.keymap.set('c', '<C-k>', '', { noremap = true, silent = true})
-vim.keymap.set('c', '<C-p>', '', { noremap = true, silent = true})
-vim.keymap.set('c', '<C-n>', '', { noremap = true, silent = true})
+vim.keymap.set('c', '<C-j>', '', { noremap = true, silent = true })
+vim.keymap.set('c', '<C-k>', '', { noremap = true, silent = true })
+vim.keymap.set('c', '<C-p>', '', { noremap = true, silent = true })
+vim.keymap.set('c', '<C-n>', '', { noremap = true, silent = true })
 
 
-vim.keymap.set('i', '<F1>', '', { noremap = true, silent = true})
-vim.keymap.set('i', '<F2>', '', { noremap = true, silent = true})
-vim.keymap.set('i', '<F3>', '', { noremap = true, silent = true})
-vim.keymap.set('i', '<F4>', '', { noremap = true, silent = true})
-vim.keymap.set('i', '<F5>', '', { noremap = true, silent = true})
-vim.keymap.set('i', '<F6>', '', { noremap = true, silent = true})
-vim.keymap.set('i', '<F7>', '', { noremap = true, silent = true})
-vim.keymap.set('i', '<F8>', '', { noremap = true, silent = true})
+vim.keymap.set('i', '<F1>', '', { noremap = true, silent = true })
+vim.keymap.set('i', '<F2>', '', { noremap = true, silent = true })
+vim.keymap.set('i', '<F3>', '', { noremap = true, silent = true })
+vim.keymap.set('i', '<F4>', '', { noremap = true, silent = true })
+vim.keymap.set('i', '<F5>', '', { noremap = true, silent = true })
+vim.keymap.set('i', '<F6>', '', { noremap = true, silent = true })
+vim.keymap.set('i', '<F7>', '', { noremap = true, silent = true })
+vim.keymap.set('i', '<F8>', '', { noremap = true, silent = true })
+
 
 -- End Mine
 
