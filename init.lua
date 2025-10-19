@@ -49,9 +49,6 @@ vim.o.pumheight = 20
 -- set to true if you have a nerd font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
--- enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
-
 -- don't show the mode, since it's already in the status line
 vim.opt.showmode = false
 
@@ -532,17 +529,7 @@ require('lazy').setup({
       openai = {
         endpoint = "https://api.openai.com/v1",
         model = "gpt-4o", -- your desired model (or use gpt-4o, etc.)
-        timeout = 30000, -- timeout in milliseconds
-        temperature = 0, -- adjust if needed
-        max_tokens = 4096,
         -- reasoning_effort = "high" -- only supported for reasoning models (o1, etc.)
-      },
-      claude = {
-        endpoint = "https://api.anthropic.com",
-        model = "claude-3-7-sonnet-20250219",
-        timeout = 30000, -- Timeout in milliseconds
-        temperature = 0,
-        max_tokens = 8000,
       },
       file_selector = {
         provider = "telescope",
@@ -964,6 +951,10 @@ vim.keymap.set('i', '<F6>', '', { noremap = true, silent = true })
 vim.keymap.set('i', '<F7>', '', { noremap = true, silent = true })
 vim.keymap.set('i', '<F8>', '', { noremap = true, silent = true })
 
+
+-- Paste the last thing that was yanked
+vim.keymap.set('n', '<C-p>', '"0p', { noremap = true, silent = true })
+vim.keymap.set('n', '<C-S-p>', '"0P', { noremap = true, silent = true })
 
 -- End Mine
 
