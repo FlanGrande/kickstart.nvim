@@ -276,6 +276,17 @@ require('lazy').setup({
             },
           },
         },
+        nim_langserver = {
+          settings = {
+            nim = {
+              logNimsuggest = false,
+              timeout = 360000,
+              nimsuggestIdleTimeout = 360000,
+              notificationVerbosity = "none",
+              -- inlayHints = "true"
+            }
+          }
+        }
       }
 
       -- You can add other tools here that you want Mason to install
@@ -504,7 +515,6 @@ require('lazy').setup({
     },
   },
 
-
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
   -- require 'kickstart.plugins.autoformat',
@@ -522,6 +532,7 @@ require('lazy').setup({
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
+
 
 -- Set highlight on search
 vim.o.hlsearch = false
@@ -700,7 +711,7 @@ vim.o.wrap = false;
 
 -- Harpoon keymaps
 vim.keymap.set('n', '<leader>ha', mark.add_file, { desc = '[A]dd to Harpoon' })
-vim.keymap.set('n', '<C-e>', ui.toggle_quick_menu)
+vim.keymap.set('n', '<leader>hl', ui.toggle_quick_menu, { desc = 'Harpoon [L]ist' })
 
 vim.keymap.set('n', '<F1>', function() ui.nav_file(1) end)
 vim.keymap.set('n', '<F2>', function() ui.nav_file(2) end)
@@ -858,9 +869,24 @@ vim.keymap.set('i', '<F8>', '', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-p>', '"0p', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-S-p>', '"0P', { noremap = true, silent = true })
 
+
+-- Godot specific
+vim.keymap.set('n', '<leader>nb', function()
+	vim.cmd('!gdextwiz build')
+end, { noremap = true, silent = true, desc = "Godot-[N]im [B]uild" })
+
+vim.keymap.set('n', '<leader>ng', function()
+  local root = vim.fs.root(0, '.git')
+
+  local cmd = string.format(
+    "tmux display-popup -d '%s' 'pwd; godot godot/main.tscn'",
+    root
+  )
+	os.execute(cmd)
+end, { noremap = true, silent = true, desc = "Godot-[Nim] run [G]ame" })
+
+
 -- End Mine
-
-
 
 
 -- The line beneath this is called `modeline`. See `:help modeline`
