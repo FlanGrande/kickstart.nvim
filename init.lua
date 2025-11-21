@@ -523,7 +523,7 @@ require('lazy').setup({
     version = "*",
     opts = {
       direction = 'vertical',
-      size = 160
+      size = 200
     },
   },
   --       These are some example plugins that I've included in the kickstart repository.
