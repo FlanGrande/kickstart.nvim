@@ -279,9 +279,9 @@ require('lazy').setup({
         nim_langserver = {
           settings = {
             nim = {
-              logNimsuggest = false,
-              timeout = 360000,
-              nimsuggestIdleTimeout = 360000,
+              -- logNimsuggest = false,
+              -- timeout = 360000,
+              -- nimsuggestIdleTimeout = 360000,
               notificationVerbosity = "none",
               -- inlayHints = "true"
             }
@@ -388,7 +388,10 @@ require('lazy').setup({
         mappings = vim.g.have_nerd_font,
         -- If you are using a Nerd Font: set icons.keys to an empty table which will use the
         -- default which-key.nvim defined Nerd Font icons, otherwise define a string table
-        keys = {}
+        keys = {},
+        rules = {
+          { pattern = "godot", icon = ""  },
+        }
       },
     },
   },
@@ -515,6 +518,14 @@ require('lazy').setup({
     },
   },
 
+  {
+    'akinsho/toggleterm.nvim',
+    version = "*",
+    opts = {
+      direction = 'vertical',
+      size = 160
+    },
+  },
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
   -- require 'kickstart.plugins.autoformat',
@@ -870,20 +881,24 @@ vim.keymap.set('n', '<C-p>', '"0p', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-S-p>', '"0P', { noremap = true, silent = true })
 
 
+-- ToggleTerm terminals
+-- LazyGit
+local LazyGitTerminal  = require('toggleterm.terminal').Terminal
+local lazygit = LazyGitTerminal:new({ cmd = "lazygit", hidden = true, direction = "float" })
+function _lazygit_toggle() lazygit:toggle() end
+vim.keymap.set('n', '<leader>lg', '<cmd>lua _lazygit_toggle()<CR>', { noremap = true, silent = true, desc = "[L]azy[G]it" })
+
 -- Godot specific
-vim.keymap.set('n', '<leader>nb', function()
-	vim.cmd('!gdextwiz build')
-end, { noremap = true, silent = true, desc = "Godot-[N]im [B]uild" })
+local GodotNimTerminal  = require('toggleterm.terminal').Terminal
+local root = vim.fs.root(0, '.git')
+local godotbuildgame = GodotNimTerminal:new({ cmd = "gdextwiz build", dir = root, hidden = true, close_on_exit = false })
+local godotrungame = GodotNimTerminal:new({ cmd = "godot godot/main.tscn", dir = root, hidden = true, close_on_exit = false })
 
-vim.keymap.set('n', '<leader>ng', function()
-  local root = vim.fs.root(0, '.git')
+function _build_godot_game() godotbuildgame:toggle() end
+function _run_godot_game() godotrungame:toggle() end
 
-  local cmd = string.format(
-    "tmux display-popup -d '%s' 'pwd; godot godot/main.tscn'",
-    root
-  )
-	os.execute(cmd)
-end, { noremap = true, silent = true, desc = "Godot-[Nim] run [G]ame" })
+vim.keymap.set('n', '<leader>nb', '<cmd>lua _build_godot_game()<CR>', { noremap = true, silent = true, desc = "Godot-[N]im [B]uild game" })
+vim.keymap.set('n', '<leader>ng', '<cmd>lua _run_godot_game()<CR>', { noremap = true, silent = true, desc = "Godot-[N]im run [G]ame" })
 
 
 -- End Mine
