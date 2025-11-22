@@ -365,6 +365,18 @@ require('lazy').setup({
           ['<S-Tab>'] = cmp.mapping.abort(),
           ['<C-p>'] = cmp.mapping.abort(),
           ['<C-n>'] = cmp.mapping.abort(),
+
+          -- These are for moving around lua snippets
+          ['<C-l>'] = cmp.mapping(function()
+            if luasnip.expand_or_locally_jumpable() then
+              luasnip.expand_or_jump()
+            end
+          end, { 'i', 's' }),
+          ['<C-h>'] = cmp.mapping(function()
+            if luasnip.locally_jumpable(-1) then
+              luasnip.jump(-1)
+            end
+          end, { 'i', 's' }),
         }),
 
         sources = {
@@ -746,6 +758,8 @@ vim.keymap.set('n', '<F5>', function() ui.nav_file(5) end)
 vim.keymap.set('n', '<F6>', function() ui.nav_file(6) end)
 vim.keymap.set('n', '<F7>', function() ui.nav_file(7) end)
 vim.keymap.set('n', '<F8>', function() ui.nav_file(8) end)
+vim.keymap.set('n', '<F9>', function() ui.nav_file(9) end)
+vim.keymap.set('n', '<F10>', function() ui.nav_file(10) end)
 
 -- Undotree keymap
 vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = '[U]ndo Tree' })

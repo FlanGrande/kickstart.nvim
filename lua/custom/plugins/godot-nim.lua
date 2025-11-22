@@ -28,15 +28,61 @@ local r = ls.restore_node
 local rep = require("luasnip.extras").rep
 
 
--- import gdext/classes/gdCollisionShape2D
-
-ls.add_snippets("all", {
-	s("gdi", {
+ls.add_snippets("nim", {
+	s("gdimport", {
 		t("import gdext/classes/gd"),
-		i(1, "GodotClass")
-	}, {
-		key = "all",
+		i(1, "Godot built-in class")
+	}),
+	s("gdvar", {
+		i(1, "Variable"),
+		t("* {.gdexport.}: "),
+		i(2, "Type"),
+	}),
+	s("gdsignal", {
+		t("proc "),
+		i(1, "signal_name"),
+		t("(self: "),
+		i(2, "SelfType"),
+		t("): Error {.gdsync, signal.}"),
+	}),
+	s("gdnewscript", {
+		t({
+			"#nim/nimmain/src/classes/"
+		}),
+		i(1, "nodename"),
+		t({
+			".nim",
+			"",
+		}),
+		t({
+			"import gdext",
+			"import gdext/classes/gd",
+		}),
+		i(2, "NodeType"),
+		t({
+			"",
+			"",
+			"type ",
+		}),
+		i(3, "NodeName"),
+		t({"* {.gdsync.} = ptr object of "}),
+		rep(2),
+		t({
+			"",
+			"",
+			"",
+			"method ready(self: ",
+		}),
+		rep(3),
+		t({
+			") {.gdsync.} =",
+			"\tdiscard",
+			"",
+			"method process(self: "}),
+		rep(3),
+		t({
+			", delta: float64) {.gdsync.} =",
+			"\tdiscard",
+		})
 	})
 })
-
-
