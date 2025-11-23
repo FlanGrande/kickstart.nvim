@@ -38,6 +38,14 @@ ls.add_snippets("nim", {
 		t("* {.gdexport.}: "),
 		i(2, "Type"),
 	}),
+	s("proc", {
+		t("proc "),
+		i(1, "procName"),
+		t("(self: "),
+		i(2, "SelfType"),
+		t("): "),
+		i(3, "ReturnType"),
+	}),
 	s("gdsignal", {
 		t("proc "),
 		i(1, "signal_name"),
