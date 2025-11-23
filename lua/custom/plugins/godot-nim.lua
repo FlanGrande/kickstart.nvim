@@ -53,6 +53,25 @@ ls.add_snippets("nim", {
 		i(2, "SelfType"),
 		t("): Error {.gdsync, signal.}"),
 	}),
+	s("gdconnect_signal", {
+		t("discard "),
+		i(1, "signal_emitter_node"),
+		t('.connect("'),
+		i(2, "signal_name"),
+		t('", self.callable("_on_'),
+		rep(2),
+		t('"))')
+	}),
+	s("gd_on_body_entered", {
+		t('proc on_body_entered(self: '),
+		i(1, "SelfType"),
+		t(', body: Node2D) {.gdsync, name: "_on_body_entered".} ='),
+	}),
+	s("gd_on_body_exited", {
+		t('proc on_body_exited(self: '),
+		i(1, "SelfType"),
+		t(', body: Node2D) {.gdsync, name: "_on_body_exited".} ='),
+	}),
 	s("gdnewscript", {
 		t({
 			"#nim/nimmain/src/classes/"
