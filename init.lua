@@ -906,7 +906,7 @@ vim.keymap.set('n', '<leader>lg', '<cmd>lua _lazygit_toggle()<CR>', { noremap = 
 
 
 require('custom.plugins.godot-nim')
-
+require('custom.plugins.roslyn')
 
 -- End Mine
 
